@@ -191,9 +191,9 @@ class ProxyURI(object):
     def start_server(self, args, option):
         handler = functools.partial(stream_handler, **vars(args), **vars(option))
         if self.unix:
-            return asyncio.start_unix_server(handler, path=self.bind, ssl=self.sslserver)
+            return asyncio.start_unix_server(handler, path=self.bind, ssl=self.sslserver, backlog=2048)
         else:
-            return asyncio.start_server(handler, host=self.host_name, port=self.port, ssl=self.sslserver)
+            return asyncio.start_server(handler, host=self.host_name, port=self.port, ssl=self.sslserver, reuse_address=True, reuse_port=True, backlog=2048)
     @classmethod
     def compile_relay(cls, uri):
         tail = cls.DIRECT
